@@ -1,0 +1,32 @@
+development:
+  adapter: mysql
+  encoding: utf8
+  reconnect: false
+  database: hylo_development
+  pool: 5
+  username: root
+  password:
+  socket: /opt/local/var/run/mysql5/mysqld.sock
+
+test: &TEST
+  adapter: mysql
+  encoding: utf8
+  reconnect: false
+  database: hylo_test
+  pool: 5
+  username: root
+  password:
+  socket: /opt/local/var/run/mysql5/mysqld.sock
+
+production:
+  adapter: mysql
+  encoding: utf8
+  reconnect: false
+  database: hylo_production
+  pool: 5
+  username: root
+  password: 
+  socket: /tmp/mysql.sock
+
+cucumber:
+  <<: *TEST

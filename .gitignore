@@ -1,0 +1,12 @@
+config/database.yml
+log/*
+coverage
+public/system/*
+tmp/*
+test
+test/*
+webrat-*.html
+.DS_Store
+.idea
+rerun.txt
+db/development_structure.sql
