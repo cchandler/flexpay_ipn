@@ -1,0 +1,45 @@
+set :application, "flexpay_ipn"
+set :repository,  "git@github.com:cchandler/flexpay_ipn.git"
+
+set :use_sudo, false
+
+set :scm,  "git"
+set :user, "deploy"
+
+set :keep_releases, 4
+#set :git_enable_submodules,1
+
+set :branch, "master"
+
+set :deploy_to, "/home/#{user}/apps/default"
+set :deploy_via, :remote_cache
+
+default_run_options[:pty] = true
+
+task :staging do 
+   set :rails_env, :production
+   role :web, 'your_site.com' 
+   role :app, 'your_site.com' 
+   role :db,  'your_site.com', :primary => true 
+end
+
+after "deploy:update_code", "deploy:symlink_config"
+
+deploy.task :symlink_config, :roles => :app, :except => { :no_release => true, :no_symlink => true } do
+  run "ln -nsf #{shared_path}/config/database.yml #{current_release}/config"
+  run "cd #{current_release} && RAILS_ENV=#{rails_env} rake gems:install"
+  run "cd #{current_release} && RAILS_ENV=#{rails_env} rake db:migrate"
+end
+
+deploy.task :start do
+  run "thin start -C /etc/thin/application.yml"
+end
+
+deploy.task :stop do
+  run "thin stop -C /etc/thin/application.yml"
+end
+
+deploy.task :restart do
+  stop
+  start
+end

@@ -3,12 +3,12 @@ class ResponsesController < ApplicationController
   skip_before_filter :verify_authenticity_token
   
   def index
-    render :text => "Found responses"
+    render :text => "This is the address to use as the responder"
   end
   
   def create
-    client = Stomp::Client.new("guest", "guest", "67.23.0.106", 61613)
-    client.publish "x.x", params.to_json , :exchange => 'amq.topic'
+    client = Stomp::Client.new("guest", "guest", "localhost", 61613)
+    client.publish "x.#{@endpoint.key}", params.to_json , :exchange => 'amq.topic'
     
     render :text => ""
   end
